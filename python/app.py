@@ -1,31 +1,47 @@
-import os
+import logging
 from flask import Flask
-from flask_mysqldb import MySQL
+from flask_sqlalchemy import SQLAlchemy
+from decouple import config
 
+# Create an instance of Flask app
 app = Flask(__name__)
-app.config['MYSQL_HOST'] = os.environ.get('DATABASE_HOST', 'db')
-app.config['MYSQL_USER'] = os.environ.get('DATABASE_USER', 'root')
-app.config['MYSQL_PASSWORD'] = os.environ.get('DATABASE_PASSWORD', 'examplepassword')
-app.config['MYSQL_PASSWORD'] = os.environ.get('DATABASE_PORT', '3306')
-app.config['PORT'] = os.environ.get('PORT', '5000')
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+
+# Configure the database connection
+database_user = config('DATABASE_USER')
+database_password = config('DATABASE_PASSWORD')
+database_host = config('DATABASE_HOST')
+database_port = config('DATABASE_PORT')
+database_name = config('DATABASE_NAME')
+server_port = config('PORT')
 
 
-mysql = MySQL(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{database_user}:{database_password}@{database_host}:{database_port}/{database_name}"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-def check_database_connection():
-    try:
-        cur = mysql.connection.cursor()
-        cur.execute("SELECT VERSION()")
-        version = cur.fetchone()
-        cur.close()
-        return f"Connected to MySQL: {version[0]}"
-    except Exception as e:
-        return f"Failed to connect to the database: {str(e)}"
+# Create an instance of SQLAlchemy
+db = SQLAlchemy(app)
 
+# Function to establish the database connection
+def connect_to_database():
+    with app.app_context():
+        try:
+            db.create_all()
+            logging.info('Connected to the database.')
+        except Exception as e:
+            logging.error(f'Error connecting to the database: {e}')
+
+# Call the connect_to_database function to establish the connection
+connect_to_database()
+
+# Define a route
 @app.route('/')
-def index():
-     check_database_connection()
-     return "Hello Wworld"
+def hello_world():
+    print('hello underwolrd')
+    return 'Hello, world!'
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=app.config['PORT'])
+    # Start the server
+    app.run(port=server_port)

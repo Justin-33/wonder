@@ -1,2 +1,7 @@
 data
-/data
+./data
+./nodejs/node_modules/
+./python/.venv
+./python/env
+./python/venv
+./python/__pycache__/

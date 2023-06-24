@@ -1,24 +1,37 @@
-# Use an official Python runtime as the base image
-FROM python:3.9-slim
+# Use a base image with Python pre-installed
+FROM python:3.9
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the requirements file and install dependencies
+# Copy the requirements file to the working directory
 COPY requirements.txt .
+
+##
+RUN pip uninstall decouple
+
+#
+RUN pip install python-decouple
+RUN pip install pymysql
+
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application's source code
+
+ENV DATABASE_USER=root
+ENV DATABASE_PASSWORD=examplepassword
+ENV DATABASE_HOST=db
+ENV DATABASE_PORT=3306
+ENV PORT=5000
+
+# Expose the specified port
+EXPOSE 5000
+# Copy the application code to the container
 COPY . .
 
-# Set the Flask app environment variable
-ENV FLASK_APP=your_app.py
-
-# Set the Flask environment to production
-ENV FLASK_ENV=production
-
-# Expose the port on which your Flask app runs
+# Expose the desired port
 EXPOSE 5000
 
-# Specify the command to run your application
-CMD ["flask", "run", "--host=0.0.0.0"]
+
+# Run the application
+CMD ["python3", "app.py"]
