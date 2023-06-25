@@ -1,63 +1,66 @@
-// Import required modules
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const express = require('express');
-const mysql = require('mysql');
-require('dotenv').config();
+const compression = require('compression');
+const helmet = require('helmet');
+const methodOverride = require('method-override');
+const dotenv = require('dotenv');
+const morgan = require('morgan');
+const apiRoutes = require('./routes');
 
-// Create an instance of Express app
+const isProduction = process.env.NODE_ENV === 'production';
+
+dotenv.config();
+
 const app = express();
-const SERVER_PORT = 3000;
 
-// Function to establish the database connection with retry mechanism
-function connectToDatabase() {
-  const connection = mysql.createConnection({
-    host: process.env.DATABASE_HOST,
-    port: process.env.DATABASE_PORT,
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD
-  });
+app.use(morgan('dev'));
 
-  connection.connect((err) => {
-    if (err) {
-      console.error('Error connecting to the database:', err);
-      // Retry connecting after a delay (e.g., 3 seconds)
-      setTimeout(connectToDatabase, 5000);
-    } else {
-      console.log('Connected to the database.');
+app.set('port', process.env.APP_PORT);
+app.set('env', process.env.NODE_ENV);
 
-      // Create the database if it doesn't exist
-      connection.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DATABASE_NAME}`, (err) => {
-        if (err) {
-          console.error('Error creating the database:', err);
-          // Retry connecting after a delay (e.g., 3 seconds)
-          setTimeout(connectToDatabase, 5000);
-        } else {
-          console.log('Database created or already exists.');
+app.use(bodyParser.json());
 
-          // Connect to the specific database
-          connection.changeUser({ database: process.env.DATABASE_NAME }, (err) => {
-            if (err) {
-              console.error('Error selecting the database:', err);
-              // Retry connecting after a delay (e.g., 3 seconds)
-              setTimeout(connectToDatabase, 5000);
-            } else {
-              console.log('Database selected.');
+app.use(cookieParser());
 
-              // Start the server once the database connection is established
-              app.listen(SERVER_PORT, () => {
-                console.log(`Server is running on port ${SERVER_PORT}`);
-              });
-            }
-          });
-        }
-      });
-    }
-  });
-}
+app.use(
+  compression({
+    filter: (req, res) => {
+      if (req.headers['x-no-compression']) {
+        // don't compress responses with this request header
+        return false;
+      }
+      // fallback to standard filter function
+      return compression.filter(req, res);
+    },
+  }),
+);
 
-// Call the connectToDatabase function to establish the connection
-connectToDatabase();
+/**
+ * Helmet for additional server security
+ *  xssfilter, frameguard etc.
+ *  https://www.npmjs.com/package/helmet
+ */
+app.use(helmet());
 
-// Define a route
-app.get('/', (req, res) => {
-  res.send('Hello, world!');
+app.disable('x-powered-by');
+
+app.use(methodOverride());
+
+const router = express.Router();
+
+router.use(apiRoutes);
+
+app.use(router);
+
+// Force all requests on production to be served over https
+app.use(function (req, res, next) {
+  if (req.headers['x-forwarded-proto'] !== 'https' && isProduction) {
+    const secureUrl = 'https://' + req.hostname + req.originalUrl;
+    res.redirect(302, secureUrl);
+  }
+
+  next();
 });
+
+module.exports = app;

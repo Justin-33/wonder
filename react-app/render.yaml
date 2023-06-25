@@ -1,0 +1,8 @@
+services:
+  - name: react-app
+    type: web
+    env:
+      - key: NODE_ENV
+        value: production
+    buildCommand: npm run build
+    directory: ./build

@@ -6,14 +6,11 @@ const dbPassword = process.env.DATABASE_PASSWORD || "nill password"
 
 
 
-const configsData = {
-  port,
-  database_crendetials : {
-    user : dbUser,
-    host : dbHost,
-    port : dbPort,
-    password : dbPassword
-  }
-};
-
-module.exports = {configsData};
+const dbConnectionOptions = {
+  host: process.env.DATABASE_HOST,
+  port: Number(process.env.DATABASE_PORT),
+  user: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD,
+  name : process.env.DATABASE_NAME
+}
+module.exports = {dbConnectionOptions};

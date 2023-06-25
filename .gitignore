@@ -1,7 +1,8 @@
 data
-./data
-./nodejs/node_modules/
-./python/.venv
-./python/env
-./python/venv
-./python/__pycache__/
+data
+nodejs/node_modules
+python/.venv
+python/env
+python/venv
+python/__pycache__
+react-app/node_modules
