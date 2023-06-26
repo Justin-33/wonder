@@ -15,9 +15,9 @@ database_password = config('DATABASE_PASSWORD')
 database_host = config('DATABASE_HOST')
 database_port = config('DATABASE_PORT')
 database_name = config('DATABASE_NAME')
-server_port = config('PORT')
+server_port = config('SERVER_PORT')
 
-
+# Uncomment the following lines if using SQLAlchemy
 app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{database_user}:{database_password}@{database_host}:{database_port}/{database_name}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -39,9 +39,8 @@ connect_to_database()
 # Define a route
 @app.route('/')
 def hello_world():
-    print('hello underwolrd')
-    return 'Hello, world!'
+    return 'Hello, world! flask app'
 
 if __name__ == '__main__':
     # Start the server
-    app.run(port=server_port)
+    app.run(host='0.0.0.0', port=int(server_port))

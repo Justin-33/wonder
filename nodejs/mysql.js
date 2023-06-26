@@ -5,7 +5,6 @@ const {dbConnectionOptions} = require('./config');
 
 
 const autoCreateDb = () => {
-  console.log('options', dbConnectionOptions)
   const connection = mysql.createConnection(dbConnectionOptions);
 
   const connectToDatabase = () => {
