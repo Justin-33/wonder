@@ -20,7 +20,7 @@ const CreateblogPage = () => {
         </Avatar>
       </Link>
       <Typography component="h1" variant="h5">
-        Create your blog
+        Create your blogs
       </Typography>
       <Blogfield />
     </Box>
