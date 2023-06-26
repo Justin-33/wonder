@@ -2,20 +2,20 @@ swagger: '2.0'
 
 info:
   version: 1.0.0
-  title: DistinctAI - User
+  title: Wonderland Blog - User
   description: |
     **Errors**
 
     Uses conventional HTTP response codes to indicate success or failure. In general, codes in the `2xx` range indicate success. Codes in the `4xx` range indicate an error (e.g. required parameters, failed request etc.). Codes int he `5xx` range indicate a server error occurred.
   
   contact:
-    name: DistinctAI
-    email: developers@distinct.ai
+    name: Nimota Inc.
+    email: developers@nimota.io
   
   license:
     name: Proprietary
 
-host: dev-api.distinct.ai
+host: nimota.io
 basePath: /users
 schemes:
   - http
@@ -84,26 +84,6 @@ paths:
           schema:
             $ref: '#/definitions/TokenDto'
 
-  /auth/email/confirm:
-    post:
-      tags:
-        - user
-      security:
-        - authToken: []
-      summary: Confirm signup email address
-      description: |
-        Auth token to be gotten from email sent to user to confirm their email address
-      operationId: authSignupEmailConfirm
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: Operation successful
-          schema:
-            $ref: '_common.yaml#/definitions/StatusDto'
-
   /auth/password/reset:
     post:
       tags:
@@ -155,41 +135,6 @@ paths:
           schema:
             $ref: '_common.yaml#/definitions/StatusDto'
 
-  /company:
-    get:
-      tags:
-        - user
-      security:
-        - authToken: []
-      summary: Get company information
-      operationId: getUserCompany
-      produces:
-        - application/json
-      responses:
-        200:
-          description: Request successful
-          schema:
-            $ref: '#/definitions/CompanyDto'
-
-    patch:
-      tags:
-        - user
-      security:
-        - authToken: []
-      summary: Update company info
-      operationId: updateCompanyInfo
-      parameters:
-        - in: body
-          name: body
-          required: true
-          schema:
-            $ref: '#/definitions/CompanyDto'
-      responses:
-        200:
-          description: Request successful
-          schema:
-            $ref: '#/definitions/CompanyDto'
-
   /me:
     get:
       tags:
@@ -225,152 +170,6 @@ paths:
           schema:
             $ref: '#/definitions/UserDto'
 
-  /me/password:
-    post:
-      tags:
-        - user
-      security:
-        - authToken: []
-      operationId: userChangePassword
-      summary: Change user password
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          required: true
-          schema:
-            $ref: '#/definitions/UserPasswordChangeDto'
-      responses:
-        200:
-          description: Request successful
-          schema:
-            $ref: '_common.yaml#/definitions/StatusDto'
-
-  /me/candidate:
-    post:
-      tags:
-        - user
-      security:
-        - authToken: []
-      summary: Add candidate information
-      operationId: addCandidateInfo
-      parameters:
-        - in: body
-          name: body
-          required: true
-          schema:
-            $ref: '#/definitions/CandidateDto'
-      responses:
-        200:
-          description: Request successful
-          schema:
-            $ref: '#/definitions/CandidateDto'
-
-  /teams:
-    get:
-      tags:
-        - user
-      security:
-        - authToken: []
-      summary: Get all team members
-      operationId: getTeamMembers
-      produces:
-        - application/json
-      responses:
-        200:
-          description: Request success
-          schema:
-            $ref: '#/definitions/TeamMemberListDto'
-
-    post:
-      tags:
-        - user
-      security:
-        - authToken: []
-      summary: Adds a team member
-      operationId: addTeamMember
-      parameters:
-        - in: body
-          name: body
-          required: true
-          description: Request body
-          schema:
-            $ref: '#/definitions/TeamMemberDto'
-      responses:
-        200:
-          description: Request successful
-          schema:
-            $ref: '#/definitions/TeamMemberDto'
-
-  /teams/{id}:
-    parameters:
-      - in: path
-        name: id
-        description: Member Id
-        required: true
-        type: string
-        format: uuid
-
-    delete:
-      tags:
-        - user
-      security:
-        - authToken: []
-      summary: Remove a team member
-      operationId: removeTeamMember
-      responses:
-        200:
-          description: Operation successful
-          schema:
-            $ref: '_common.yaml#/definitions/StatusDto'
-
-    patch:
-      tags:
-        - user
-      security:
-        - authToken: []
-      summary: Update team member
-      operationId: updateTeamMember
-      parameters:
-        - in: body
-          name: body
-          required: true
-          description: Request body
-          schema:
-            $ref: '#/definitions/TeamMemberDto'
-      responses:
-        200:
-          description: Update success
-          schema:
-            $ref: '#/definitions/TeamMemberDto'
-
-  /teams/invite/respond:
-    post:
-      tags:
-        - user
-      security:
-        - authToken: []
-      summary: Respond to team invite
-      operationId: respondTeamInvite
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          required: true
-          schema:
-            $ref: '#/definitions/TeamInviteResponseDto'
-      responses:
-        200:
-          description: Request successful
-          schema:
-            $ref: '_common.yaml#/definitions/StatusDto'
-
 definitions:
   TokenDto:
     type: object
@@ -385,12 +184,6 @@ definitions:
         type: number
         example: 3600
 
-  UserTypes:
-    type: string
-    enum:
-      - CANDIDATE
-      - COMPANY
-
   SignupRequestDto:
     type: object
     required:
@@ -400,8 +193,6 @@ definitions:
       - email
       - password
     properties:
-      type:
-        $ref: '#/definitions/UserTypes'
       firstName:
         type: string
       lastName:
@@ -420,8 +211,6 @@ definitions:
       - email
       - password
     properties: 
-      type:
-        $ref: '#/definitions/UserTypes'
       email:
         type: string
       password:
@@ -438,10 +227,6 @@ definitions:
         type: string
         format: uuid
         readOnly: true
-      type:
-        allOf:
-          - $ref: '#/definitions/UserTypes'
-          - readOnly: true
       firstName:
         type: string
       middleName:
@@ -460,68 +245,6 @@ definitions:
         $ref: '_common.yaml#/definitions/Timestamp'
       updatedAt:
         $ref: '_common.yaml#/definitions/Timestamp'
-
-  CompanyDto:
-    type: object
-    properties:
-      id:
-        type: string
-        format: uuid
-        readOnly: true
-      logo:
-        type: string
-      name:
-        type: string
-      bio:
-        type: string
-      size:
-        type: string
-      industry:
-        type: string
-      locations:
-        type: array
-        items: 
-          type: string
-      socials:
-        type: object
-        properties:
-          website:
-            type: string
-            format: url
-          linkedIn:
-            type: string
-          instagram:
-            type: string
-          twitter:
-            type: string
-          facebook:
-            type: string
-          glassdoor:
-            type: string
-      createdAt:
-        $ref: '_common.yaml#/definitions/Timestamp'
-      updatedAt:
-        $ref: '_common.yaml#/definitions/Timestamp'
-
-  CandidateDto:
-    type: object
-    properties:
-      salary:
-        type: object
-        properties:
-          current:
-            $ref: '_common.yaml#/definitions/AmountFormat'
-          desired:
-            $ref: '_common.yaml#/definitions/AmountFormat'
-      jobLocation:
-        type: string
-        enum:
-          - OFFICE
-          - REMOTE
-          - HYBRID
-      dob:
-        type: string
-        format: date-time
 
   PasswordResetDto:
     type: object
@@ -548,54 +271,3 @@ definitions:
       newPassword:
         type: string
         description: New password to replace current
-
-  TeamMemberDto:
-    type: object
-    properties:
-      id:
-        type: string
-        format: uuid
-        readOnly: true
-      status:
-        type: string
-        readOnly: true
-        enum:
-          - PENDING
-          - ACCEPTED
-          - REJECTED
-          - EXPIRED
-      firstName:
-        type: string
-      lastName:
-        type: string
-      email:
-        type: string
-      phoneNumber:
-        type: string
-      permissions:
-        type: array
-        items:
-          type: string
-      createdAt:
-        $ref: '_common.yaml#/definitions/Timestamp'
-      updatedAt:
-        $ref: '_common.yaml#/definitions/Timestamp'
-
-  TeamMemberListDto:
-    type: object
-    properties: 
-      members:
-        type: array
-        items:
-          $ref: '#/definitions/TeamMemberDto'
-
-  TeamInviteResponseDto:
-    type: object
-    properties:
-      response:
-        type: string
-        enum:
-          - ACCEPT
-          - REJECT
-      password:
-        type: string

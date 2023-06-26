@@ -8,7 +8,6 @@ definitions:
     type: string
     example: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
     format: uuid
-
   StatusDto:
     type: object
     description: Status data, check additional message field
@@ -16,7 +15,7 @@ definitions:
       - success
     properties:
       success:
-        type: boolean
+        type: boolean 
         example: true
       message:
         type: string
@@ -68,84 +67,6 @@ definitions:
         type: string
         description: any value to represent
 
-  JobDto:
-    type: object
-    properties:
-      id:
-        type: string
-        format: uuid
-        readOnly: true
-      status:
-        type: string
-        readOnly: true
-        enum:
-          - ACTIVE
-          - PAUSED
-          - DRAFTS
-          - CLOSED
-      title:
-        type: string
-      userId:
-        type: string  
-      description:
-        type: string
-      jobType:
-        type: string
-        enum:
-          - FULL_TIME
-          - PART_TIME
-          - CONTRACT
-      yearsOfExperience:
-        type: string
-      skills:
-        type: array
-        items: 
-          type: string
-      qualifications:
-        type: array
-        items:
-          type: string
-          enum:
-            - BSC
-            - PHD
-      preferredLocation:
-        type: array
-        items:
-          type: string
-      jobLocation:
-        type: array
-        items:
-          type: string
-          enum:
-            - OFFICE
-            - REMOTE
-            - HYBRID
-      salary:
-        type: object
-        properties:
-          currency:
-            type: string
-            example: NGN
-          rangeFrom:
-            type: number
-          rangeTo:
-            type: number
-          benefits:
-            type: string
-            enum:
-              - EQUITY
-              - STOCK_OPTIONS
-      publishedAt:
-        $ref: '_common.yaml#/definitions/Timestamp'
-      closedAt:
-        $ref: '_common.yaml#/definitions/Timestamp'
-      deadlineAt:
-        $ref: '_common.yaml#/definitions/Timestamp'
-      createdAt:
-        $ref: '_common.yaml#/definitions/Timestamp'
-      updatedAt:
-        $ref: '_common.yaml#/definitions/Timestamp'
-
   AmountFormat:
     type: object
     properties:
@@ -153,3 +74,38 @@ definitions:
         type: string
       currency:
         type: string
+
+parameters:
+  pageNumber:
+    name: page
+    in: query
+    required: false
+    type: integer
+    format: int32
+    default: 1
+    description: Page number of items to return
+
+  pageSize:
+    name: size
+    in: query
+    required: false
+    type: integer
+    format: int32
+    default: 20
+    description: Number of items to return
+
+  fromDate:
+    in: query
+    name: fromDate
+    required: false
+    type: integer
+    description: unix milliseconds representation of date to get transaction from
+    format: int64
+
+  toDate:
+    in: query
+    name: toDate
+    type: integer
+    required: false
+    description: unix milliseconds representation of date to end transactions
+    format: int64
