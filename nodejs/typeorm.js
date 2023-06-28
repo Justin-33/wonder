@@ -1,7 +1,6 @@
 /* istanbul ignore file */
 require('reflect-metadata');
 const dotenv = require('dotenv');
-const { ConnectionOptions } = require('typeorm');
 const {dbConnectionOptions} = require('./config');
 
 
