@@ -1,5 +1,5 @@
 import logging
-from flask import Flask
+from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from decouple import config
 
@@ -39,7 +39,33 @@ connect_to_database()
 # Define a route
 @app.route('/')
 def hello_world():
-    return 'Hello, world! flask app'
+    response = jsonify({'Status': 'OK'})
+    response.status_code = 200
+    return response
+
+@app.route('/auth/signup')
+def signup():
+    response = jsonify({'Status': 'OK'})
+    response.status_code = 200
+    return response
+@app.route('/auth/signup')
+def signin():
+    response = jsonify({'Status': 'OK'})
+    response.status_code = 200
+    return response
+
+@app.route('/auth/password/reset')
+def password_reset():
+    response = jsonify({'Status': 'OK'})
+    response.status_code = 200
+    return response
+
+@app.route('/auth/password/change')
+def pasword_change():
+    response = jsonify({'Status': 'OK'})
+    response.status_code = 200
+    return response
+
 
 if __name__ == '__main__':
     # Start the server
