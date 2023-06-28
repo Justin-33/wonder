@@ -77,7 +77,7 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - express-app
+      # - express-app
       - flask-app
       - react-app
     networks:

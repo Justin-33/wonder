@@ -10,8 +10,11 @@ const autoCreateDb = () => {
   const connectToDatabase = () => {
     connection.connect((err) => {
       if (err) {
-        console.log('Database connection failed. Retrying in 3 seconds...');
-        setTimeout(connectToDatabase, 3000); // Retry after 3 seconds
+        console.log({
+          error : "Error connecting to database, Retrying...",
+          message : err
+        });
+        setTimeout(connectToDatabase, 5000); // Retry after 3 seconds
       } else {
         console.log('Database connection successful');
         createDatabase();
@@ -20,7 +23,7 @@ const autoCreateDb = () => {
   };
 
   const createDatabase = () => {
-    connection.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`, (err) => {
+    connection.query(`CREATE DATABASE IF NOT EXISTS ${dbConnectionOptions.name} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`, (err) => {
       connection.end();
 
       if (err) {
