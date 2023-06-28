@@ -2,6 +2,7 @@ import logging
 from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from decouple import config
+from routes import signup, signin, password_reset, pasword_change, authenticate_user,update_user
 
 # Create an instance of Flask app
 app = Flask(__name__)
@@ -37,34 +38,12 @@ def connect_to_database():
 connect_to_database()
 
 # Define a route
-@app.route('/')
-def hello_world():
-    response = jsonify({'Status': 'OK'})
-    response.status_code = 200
-    return response
-
-@app.route('/auth/signup')
-def signup():
-    response = jsonify({'Status': 'OK'})
-    response.status_code = 200
-    return response
-@app.route('/auth/signup')
-def signin():
-    response = jsonify({'Status': 'OK'})
-    response.status_code = 200
-    return response
-
-@app.route('/auth/password/reset')
-def password_reset():
-    response = jsonify({'Status': 'OK'})
-    response.status_code = 200
-    return response
-
-@app.route('/auth/password/change')
-def pasword_change():
-    response = jsonify({'Status': 'OK'})
-    response.status_code = 200
-    return response
+app.add_url_rule("/auth/signup/<health>",  "signup", signup, methods=["POST"])
+app.add_url_rule("/auth/signin/<health>", "signin", signin, methods=["POST"])
+app.add_url_rule("/auth/password/change/<health>", "password_change", pasword_change, methods=["POST"])
+app.add_url_rule("/auth/password/reset/<health>", "password_reset", password_reset, methods=["POST"])
+app.add_url_rule("/me/<health>", "authenticate_user", authenticate_user)
+app.add_url_rule("/me/<health>", "updated_user", update_user, methods=["PATCH"])
 
 
 if __name__ == '__main__':
