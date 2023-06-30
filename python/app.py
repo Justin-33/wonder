@@ -38,12 +38,12 @@ def connect_to_database():
 connect_to_database()
 
 # Define a route
-app.add_url_rule("/auth/signup/<health>",  "signup", signup, methods=["POST"])
-app.add_url_rule("/auth/signin/<health>", "signin", signin, methods=["POST"])
-app.add_url_rule("/auth/password/change/<health>", "password_change", pasword_change, methods=["POST"])
-app.add_url_rule("/auth/password/reset/<health>", "password_reset", password_reset, methods=["POST"])
-app.add_url_rule("/me/<health>", "authenticate_user", authenticate_user)
-app.add_url_rule("/me/<health>", "updated_user", update_user, methods=["PATCH"])
+app.add_url_rule("/auth/signup",  "signup", signup, methods=["POST"])
+app.add_url_rule("/auth/signin", "signin", signin, methods=["POST"])
+app.add_url_rule("/auth/password/change", "password_change", pasword_change, methods=["POST"])
+app.add_url_rule("/auth/password/reset", "password_reset", password_reset, methods=["POST"])
+app.add_url_rule("/me", "authenticate_user", authenticate_user)
+app.add_url_rule("/me", "updated_user", update_user, methods=["PATCH"])
 
 
 if __name__ == '__main__':
