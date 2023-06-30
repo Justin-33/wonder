@@ -27,14 +27,14 @@ const autoCreateDb = () => {
       connection.end();
 
       if (err) {
-        console.log('Unable to create database.', err.message, err.stack);
+        console.log('Unable to create databases.', err.message, err.stack);
       } else {
         console.log('Database creation successful');
-      }
+      } 
     });
   };
 
-  connectToDatabase();
+  connectToDatabase();  
 };
 
 module.exports = {
