@@ -5,7 +5,7 @@ const compression = require('compression');
 const helmet = require('helmet');
 const methodOverride = require('method-override');
 const dotenv = require('dotenv');
-const morgan = require('morgan');
+const morgan = require('morgan'); 
 const apiRoutes = require('./routes');
 
 const isProduction = process.env.NODE_ENV === 'production';
