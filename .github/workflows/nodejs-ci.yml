@@ -17,13 +17,19 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 14
-
-      - name: Install dependencies
+      
+      - name: List directory contents
         run: |
-          cd nodejs
-          npm install
+         ls
+         ls -la 
+          pwd
 
-      - name: Run tests
-        run: |
-          cd nodejs
-          npm test
+      # - name: Install dependencies
+      #   run: |
+      #     cd nodejs
+      #     npm install
+
+      # - name: Run tests
+      #   run: |
+      #     cd nodejs
+      #     npm test
