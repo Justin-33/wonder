@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from decouple import config
 from sqlalchemy_utils import create_database, database_exists
 
+
 # Create an instance of Flask app
 app = Flask(__name__)
 
@@ -65,13 +66,13 @@ def connect_to_database():
 connect_to_database()
 
 # Define a route
-@app.route('/')
-def hello_world():
-    return 'Hello, world! Flask app'
+app.add_url_rule("/auth/signup",  "signup", signup, methods=["POST"])
+app.add_url_rule("/auth/signin", "signin", signin, methods=["POST"])
+app.add_url_rule("/auth/password/change", "password_change", pasword_change, methods=["POST"])
+app.add_url_rule("/auth/password/reset", "password_reset", password_reset, methods=["POST"])
+app.add_url_rule("/me", "authenticate_user", authenticate_user)
+app.add_url_rule("/me", "updated_user", update_user, methods=["PATCH"])
 
-@app.route('/auth/signup')
-def signup_controller():
-    return 'Hello, world! Signup route'
 
 
 if __name__ == '__main__':
