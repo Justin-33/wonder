@@ -23,13 +23,3 @@ jobs:
          ls
          ls -la 
           pwd
-
-      # - name: Install dependencies
-      #   run: |
-      #     cd nodejs
-      #     npm install
-
-      # - name: Run tests
-      #   run: |
-      #     cd nodejs
-      #     npm test
