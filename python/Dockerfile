@@ -6,7 +6,8 @@ WORKDIR /app
 
 # Install dependencies
 RUN pip uninstall decouple && \
-    pip install python-decouple pymysql
+    pip install python-decouple pymysql && \
+    pip install sqlalchemy_utils
 
 # Copy the requirements file to the working directory
 COPY requirements.txt .
