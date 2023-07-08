@@ -1,7 +1,7 @@
 const { execSync } = require('child_process');
 
 function startEnvironment() {
-  execSync('watchexec -r docker-compose up --build', { stdio: 'inherit' });
+  execSync('docker-compose up --build', { stdio: 'inherit' });
 }
 
 function destroyEnvironment() {

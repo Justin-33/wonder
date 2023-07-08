@@ -1,24 +1,32 @@
 import logging
 import time
-from flask import Flask
+from flask import Flask,jsonify
 from flask_sqlalchemy import SQLAlchemy
 from decouple import config
 from sqlalchemy_utils import create_database, database_exists
-
+from middleware import middleware_signup
+from controller import signin,signup,pasword_change,update_user,authenticate_user,password_reset
 
 # Create an instance of Flask app
 app = Flask(__name__)
-
+# config.encoding = 'cp1251'
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
-# Configure the database connection
+#Configure the database connection
 database_user = config('DATABASE_USER')
 database_password = config('DATABASE_PASSWORD')
 database_host = config('DATABASE_HOST')
 database_port = int(config('DATABASE_PORT'))
 database_name = config('DATABASE_NAME')
 server_port = config('SERVER_PORT')
+
+# database_user = "root"
+# database_password = "examplepassword"
+# database_host = 3306
+# database_port = 3306
+# database_name = "mysqldb"
+# server_port = "5001"
 
 # Print the database details
 logging.info(f'Database details:')
@@ -64,6 +72,24 @@ def connect_to_database():
 
 # Call the connect_to_database function to establish the connection
 connect_to_database()
+
+@app.before_request
+def validate_signup():
+    if signin:
+        try:
+            middleware_signup()
+        except:
+            if middleware_signup() == False:
+                response = jsonify({
+        "unsuccessful":"invalid input, sign up not successful" 
+        })
+            response.status_code = 401
+            return response
+                
+
+
+
+
 
 # Define a route
 app.add_url_rule("/auth/signup",  "signup", signup, methods=["POST"])
